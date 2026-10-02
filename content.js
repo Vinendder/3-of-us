@@ -42,29 +42,29 @@ const PEOPLE = [
   {
     name: "Ganesh", color: "#0d31c0", tagline: "Theek aa pa.",
     photo: "media/one.jpg",
-    bio: "Write a few lines about this person here.",
+    bio: "Casual Tower Defence Enjoyer",
     photos: range("media/one/", 1, 9, "jpg"),
     videos: [],  // e.g. "media/one/clip.mp4" or a YouTube link
-    stories: [ { date: "2026-01-10", title: "The day we met", text: "Tell the story here." } ],
-    blogs:   [ { date: "2026-10-02", title: "My first post", text: "Write anything here.\n\nA blank line starts a new paragraph." } ]
+    stories: [ { date: "2026-01-10", title: "The day we met", text: "TBA" } ],
+    blogs:   [ { date: "2026-10-02", title: "My first post", text: "TBA.\n\nA blank line starts a new paragraph." } ]
   },
   {
     name: "Varun", color: "#af0707", tagline: ":hug",
     photo: "media/two.jpg",
-    bio: "Write a few lines about this person here.",
+    bio: "Tryhard Minecraft Enjoyer",
     photos: range("media/two/", 1, 7, "jpg"),
     videos: [],
-    stories: [ { date: "2026-02-14", title: "A memory", text: "Tell the story here." } ],
-    blogs:   [ { date: "2026-10-02", title: "My first post", text: "Write anything here." } ]
+    stories: [ { date: "2026-02-14", title: "A memory", text: "TBA" } ],
+    blogs:   [ { date: "2026-10-02", title: "My first post", text: "TBA." } ]
   },
   {
     name: "Vinendder", color: "#6622e5", tagline: "can we play?",
     photo: "media/three.jpg",
-    bio: "Write a few lines about this person here.",
+    bio: "Retired Industrialist Enjoyer",
     photos: range("media/three/", 1, 10, "jpg"),
     videos: [],
-    stories: [ { date: "2026-03-01", title: "A memory", text: "Tell the story here." } ],
-    blogs:   [ { date: "2026-10-02", title: "My first post", text: "Write anything here." } ]
+    stories: [ { date: "2026-03-01", title: "A memory", text: "TBA" } ],
+    blogs:   [ { date: "2026-10-02", title: "My first post", text: "TBA." } ]
   }
 ];
 
