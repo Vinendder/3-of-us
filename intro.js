@@ -172,6 +172,7 @@
   let videoStarted = false;
   let videoBad = false;
   let giveUp;
+  let holdTimer;
 
   // Smooth volume change (iPhones ignore volume changes, so there it just starts/stops)
   function fade(media, to, ms, done) {
@@ -189,6 +190,7 @@
     if (finished) return;
     finished = true;
     clearTimeout(giveUp);
+    clearInterval(holdTimer);
     if (ONCE_PER_SESSION) sessionStorage.setItem("introSeen", "1");
     if (music && !music.paused) fade(music, 0, 900, () => music.pause());
     if (!video.paused) fade(video, 0, 900, () => video.pause());
@@ -198,8 +200,12 @@
   }
 
   // 5) Video events
+  // Until the title card is done, the video must stay paused (never visible or audible)
+  const holdVideo = () => { if (!videoStarted && !video.paused) video.pause(); };
+  video.addEventListener("play", holdVideo);
   video.addEventListener("playing", () => {
-    if (videoStarted) video.classList.add("show"); // video "pops up"
+    if (!videoStarted) return holdVideo();
+    video.classList.add("show");                    // video "pops up"
   });
   video.addEventListener("ended", finish);          // fades away when done
   video.addEventListener("error", () => { videoBad = true; });
@@ -212,6 +218,8 @@
 
   function playVideo() {
     videoStarted = true;
+    clearInterval(holdTimer);
+    try { video.currentTime = 0; } catch (e) {}
     video.volume = 1;
     if (music && !MUSIC_CONTINUES_IN_VIDEO) fade(music, 0, 1500, () => music.pause());
     giveUp = setTimeout(() => { if (video.paused) finish(); }, GIVE_UP_AFTER_MS);
@@ -258,15 +266,14 @@
     $("intro-gate").classList.add("gone");
     setTimeout(() => $("intro-gate").remove(), 900);
 
-    // "Unlock" the video's sound now, while we have a tap, then pause until its turn
+    // "Unlock" the video's sound now, while we have a tap: start it and pause it in the
+    // same instant, so it never really plays. It stays paused (and silent) until its turn.
     video.muted = false;
     video.volume = 0;
-    video.play()
-      .then(() => {
-        if (!videoStarted) { video.pause(); video.currentTime = 0; }
-        video.volume = 1;
-      })
-      .catch(() => { video.volume = 1; });
+    const unlock = video.play();
+    video.pause();
+    if (unlock && unlock.catch) unlock.catch(() => {});
+    holdTimer = setInterval(holdVideo, 150);        // safety net: keep it paused during the title
 
     if (music) {
       music.play().then(() => fade(music, MUSIC_VOLUME, 2500)).catch(() => {});
