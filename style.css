@@ -1,0 +1,178 @@
+:root { --bg:#eef1f6; --ink:#1b2340; --muted:#5b6482; --card:#fff; --c:#1b2340;
+  --head:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif; --body:"DM Sans",system-ui,sans-serif; }
+* { box-sizing:border-box; margin:0; }
+body { background:var(--bg); color:var(--ink); font:17px/1.65 var(--body); min-height:100vh; display:flex; flex-direction:column; }
+main { flex:1; width:100%; max-width:1000px; margin:0 auto; padding:1.5rem; }
+h1,h2,h3 { font-family:var(--head); line-height:1.1; }
+nav { display:flex; justify-content:space-between; padding:.9rem 1.5rem; border-bottom:1px solid color-mix(in srgb,var(--ink) 15%,transparent); }
+nav a { color:var(--ink); text-decoration:none; font-weight:500; } nav a:first-child { font-family:var(--head); font-weight:800; }
+.back { display:inline-block; color:var(--muted); text-decoration:none; margin-bottom:1rem; } .back:hover { color:var(--ink); }
+footer { text-align:center; color:var(--muted); padding:2rem 1rem; }
+
+/* buttons */
+.btn { display:inline-block; border:2px solid var(--c); background:transparent; color:var(--ink); padding:.55rem 1.4rem;
+  border-radius:99px; font:500 1rem var(--body); text-decoration:none; cursor:pointer; transition:background .15s,color .15s; }
+.btn:hover,.btn:focus-visible { background:var(--c); color:#fff; outline:none; }
+.btn.big { font-size:1.2rem; padding:.8rem 2.2rem; }
+a:focus-visible,button:focus-visible { outline:3px solid var(--c); outline-offset:3px; }
+
+/* round photos */
+.av { position:relative; display:grid; place-items:center; width:120px; height:120px; border-radius:50%; background:var(--c); overflow:hidden; color:#fff; flex:none; }
+.av b { font:800 3rem var(--head); } .av img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+
+/* intro */
+.home { text-align:center; padding:2rem 0; }
+.faces { display:flex; justify-content:center; margin-bottom:2rem; }
+.faces .av { width:clamp(110px,24vw,200px); height:clamp(110px,24vw,200px); margin:0 -14px; border:5px solid var(--bg); }
+.home h1 { font-size:clamp(2.6rem,9vw,5.5rem); font-weight:800; letter-spacing:-.03em; }
+.sub { color:var(--muted); font-size:1.2rem; margin-top:.5rem; }
+.quotes { display:grid; gap:1.2rem; max-width:560px; margin:2.5rem auto; }
+blockquote { font:600 1.4rem/1.35 var(--head); } cite { display:block; font:400 .95rem var(--body); color:var(--muted); margin-top:.3rem; }
+cite::before { content:"– "; }
+
+/* hub */
+.cards { display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem; }
+.card { display:flex; flex-direction:column; align-items:center; gap:.4rem; text-align:center; padding:1.8rem 1rem; background:var(--card);
+  border-radius:14px; border-top:6px solid var(--c); color:var(--ink); text-decoration:none; }
+.card h2 { font-size:1.6rem; color:var(--c); } .card p { color:var(--muted); margin-bottom:.6rem; }
+.card:hover .btn { background:var(--c); color:#fff; }
+.tog { text-align:center; margin-top:4rem; display:grid; gap:1.2rem; justify-items:center; }
+.tog h2 { font-size:clamp(1.8rem,5vw,2.8rem); font-weight:800; }
+
+/* friend page */
+.friend { text-align:center; display:grid; justify-items:center; gap:.6rem; padding:2rem 0; }
+.friend h1,.mem h1 { font-size:clamp(2rem,6vw,3.4rem); font-weight:800; color:var(--c); }
+.bio { color:var(--muted); max-width:60ch; }
+.two { display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; margin-top:1.2rem; }
+
+/* memories */
+.tabs { display:flex; gap:.5rem; margin:1.4rem 0; flex-wrap:wrap; }
+.tabs button { border:0; background:var(--card); color:var(--ink); padding:.5rem 1.1rem; border-radius:99px; font:500 .95rem var(--body); cursor:pointer; }
+.tabs button.on { background:var(--c); color:#fff; }
+[hidden] { display:none !important; }
+.gallery { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:.8rem; margin-bottom:1.5rem; }
+figure { cursor:zoom-in; } figure img { width:100%; aspect-ratio:1; object-fit:cover; border-radius:10px; display:block; }
+figcaption { font-size:.85rem; color:var(--muted); padding-top:.3rem; }
+figure.missing { aspect-ratio:1; display:grid; place-items:center; border:2px dashed var(--muted); border-radius:10px; }
+figure.missing::after { content:"Photo not found"; color:var(--muted); font-size:.85rem; }
+.videos:not([hidden]) { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1rem; }
+video,iframe { width:100%; aspect-ratio:16/9; border:0; border-radius:10px; background:#000; }
+.card2 { background:var(--card); padding:1.2rem 1.4rem; border-radius:10px; margin-bottom:1rem; max-width:70ch; }
+.card2 h3 { font-size:1.3rem; margin:.2rem 0 .4rem; } .card2 p+p { margin-top:.8rem; }
+time { font-size:.85rem; color:var(--muted); }
+summary { cursor:pointer; font:700 1.3rem var(--head); display:flex; justify-content:space-between; gap:1rem; align-items:baseline; }
+details[open] summary { margin-bottom:.8rem; }
+
+/* photo viewer */
+#lb { position:fixed; inset:0; z-index:10; background:rgba(0,0,0,.92); display:flex; align-items:center; justify-content:center; }
+#lb img { max-width:86vw; max-height:90vh; border-radius:6px; }
+#lb button { position:absolute; background:none; border:0; color:#fff; font-size:2.6rem; cursor:pointer; padding:1rem; }
+#lb [data-close] { top:0; right:0; } #lb [data-step="-1"] { left:0; } #lb [data-step="1"] { right:0; }
+
+@media (max-width:700px) { .cards { grid-template-columns:1fr; } .faces .av { margin:0 -10px; } }
+
+/* ============ ANIMATIONS ============
+   All wrapped so people who turn on "reduce motion" in their system get none.
+   Speed knobs: change the 0.5s / 0.6s numbers below to make things faster or slower. */
+@media (prefers-reduced-motion: no-preference) {
+
+  /* 1. Page switch: each new page fades in and slides up a little */
+  .page { animation: pageIn .5s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes pageIn { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:none; } }
+
+  /* 2. Opening the site: the intro builds in steps (faces pop, then title, quotes, button) */
+  .home .av { animation: pop .6s cubic-bezier(.3,1.4,.5,1) both; }
+  .home .av:nth-child(1) { animation-delay:.1s; } .home .av:nth-child(2) { animation-delay:.25s; } .home .av:nth-child(3) { animation-delay:.4s; }
+  @keyframes pop { from { opacity:0; transform:scale(.6); } to { opacity:1; transform:none; } }
+  .home h1, .home .sub, .home blockquote, .home .btn { animation: rise .6s ease-out both; }
+  .home h1 { animation-delay:.6s; } .home .sub { animation-delay:.75s; }
+  .home blockquote:nth-child(1) { animation-delay:.95s; } .home blockquote:nth-child(2) { animation-delay:1.1s; } .home blockquote:nth-child(3) { animation-delay:1.25s; }
+  .home .btn { animation-delay:1.5s; }
+  @keyframes rise { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+
+  /* 3. Hover effects: buttons, cards, photos, tabs lift slightly */
+  .btn, .card, .tabs button { transition: transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease; }
+  .btn:hover, .btn:focus-visible { transform: translateY(-3px); box-shadow: 0 8px 18px color-mix(in srgb, var(--c) 35%, transparent); }
+  .btn:active { transform: translateY(0) scale(.97); }
+  .card:hover { transform: translateY(-6px); box-shadow: 0 14px 28px color-mix(in srgb, var(--c) 25%, transparent); }
+  .tabs button:hover { transform: translateY(-2px); }
+  figure img { transition: transform .25s ease, box-shadow .25s ease; }
+  figure:hover img { transform: translateY(-4px) scale(1.02); box-shadow: 0 10px 22px rgba(0,0,0,.25); }
+  .av { transition: transform .25s ease; } .card:hover .av { transform: scale(1.06); }
+  nav a { transition: opacity .2s; } nav a:hover { opacity:.6; }
+  .back { transition: transform .2s, color .2s; } .back:hover { transform: translateX(-4px); }
+
+  /* 4. New photos ("Show more"), tab panels, and the photo viewer fade in */
+  figure { animation: fade .4s ease both; }
+  .panel:not([hidden]) { animation: fade .35s ease both; }
+  #lb:not([hidden]) { animation: fade .2s ease both; } #lb img { animation: pop .25s ease both; }
+  @keyframes fade { from { opacity:0; } to { opacity:1; } }
+  details .card2, summary { transition: background .2s; } summary:hover { color: var(--c); }
+}
+
+/* ============ SETTINGS MENU + text inside cards (so "Mixed" mode stays readable) ============ */
+.card, .card2, .tabs button { color: var(--cardink, var(--ink)); }
+.card p, .card2 time { color: var(--cardmuted, var(--muted)); }
+.card .btn { color: var(--cardink, var(--ink)); }
+.set { position: relative; }
+#setBtn { background: none; border: 0; color: var(--ink); font: 500 1rem var(--body); cursor: pointer; padding: .1rem .2rem; }
+#setBtn:hover { opacity: .6; }
+#setPanel { position: absolute; right: 0; top: 2.2rem; z-index: 6; min-width: 170px; padding: .8rem; display: grid; gap: .4rem;
+  background: var(--card); color: var(--cardink, var(--ink)); border-radius: 12px; box-shadow: 0 12px 30px rgba(0,0,0,.25); }
+#setPanel p { font-size: .85rem; color: var(--cardmuted, var(--muted)); }
+#setPanel button { text-align: left; border: 2px solid transparent; background: none; color: inherit; font: 500 1rem var(--body);
+  padding: .45rem .7rem; border-radius: 8px; cursor: pointer; }
+#setPanel button:hover { background: color-mix(in srgb, var(--cardink, var(--ink)) 10%, transparent); }
+#setPanel button[aria-pressed="true"] { border-color: var(--c); font-weight: 700; }
+@media (prefers-reduced-motion: no-preference) { #setPanel:not([hidden]) { animation: pageIn .2s ease both; } }
+
+/* ============ OBVIOUS BUTTONS ============
+   Resting: solid colour + white text + a bottom edge, so they look pressable.
+   Hover (mouse) or press (finger): colours flip completely. */
+.btn, .card .btn { background: var(--c); color: #fff; border-color: var(--c); font-weight: 700;
+  min-height: 46px; display: inline-flex; align-items: center; justify-content: center;   /* 46px+ = easy to tap */
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--c) 55%, #000);
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+.btn.big { min-height: 54px; }
+@media (hover: hover) {                        /* only devices with a real mouse */
+  .btn:hover, .btn:focus-visible { background: var(--bg); color: var(--c); }
+  .card:hover .btn, .card .btn:hover { background: var(--card); color: var(--c); }
+}
+@media (hover: none) {                         /* phones/tablets: stop effects "sticking" after a tap */
+  .btn:hover, .btn:focus-visible { transform: none; box-shadow: 0 4px 0 color-mix(in srgb, var(--c) 55%, #000); }
+  .card:hover, figure:hover img, .tabs button:hover, .back:hover, .card:hover .av { transform: none; box-shadow: none; }
+}
+.btn:active, .card .btn:active { background: var(--bg); color: var(--c); transform: translateY(3px) scale(.98); box-shadow: 0 1px 0 var(--c); }
+
+/* ============ VIDEOS: thumbnails in the grid + full-screen player ============ */
+.videos:not([hidden]) { grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); }   /* min(...) stops overflow on small phones */
+.vthumb { position: relative; display: block; width: 100%; aspect-ratio: 16/9; padding: 0; border: 0; border-radius: 10px;
+  overflow: hidden; background: #000; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.vthumb video, .vthumb img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 0; pointer-events: none; }
+.vthumb .play { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(0,0,0,.25); }
+.vthumb .play b { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; padding-left: 4px;
+  background: rgba(0,0,0,.6); color: #fff; font-size: 1.3rem; border: 2px solid rgba(255,255,255,.8); }
+@media (hover: hover) { .vthumb:hover .play b { background: var(--c); } }
+
+#lb.vmode { flex-direction: column; gap: .9rem; padding: 3.4rem .6rem 1rem; }
+#lb .vbox { width: min(100%, 1100px); }
+#lb .vbox video { width: 100%; height: auto; max-height: calc(100vh - 11rem); max-height: calc(100dvh - 11rem); aspect-ratio: auto; background: #000; border-radius: 8px; display: block; }
+#lb .vbox iframe { width: 100%; height: auto; aspect-ratio: 16/9; border-radius: 8px; }
+#lb .vnav { display: flex; align-items: center; justify-content: center; gap: 1rem; color: #fff; }
+#lb .vnav button { position: static; background: rgba(255,255,255,.18); border-radius: 99px; min-height: 48px; padding: .6rem 1.4rem; font: 500 1rem var(--body); }
+#lb .vnav button:hover { background: rgba(255,255,255,.3); }
+#lb [data-close] { top: 0; right: 0; min-width: 56px; min-height: 56px; }
+
+/* ============ MOBILE ============ */
+@media (max-width: 700px) {
+  main { padding: 1rem; }
+  nav { padding: .8rem 1rem; }
+  .gallery { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: .5rem; }   /* 2 photos per row on phones */
+  .videos:not([hidden]) { grid-template-columns: 1fr; }
+  #lb img { max-width: 100vw; max-height: 82vh; max-height: 82dvh; border-radius: 0; }
+  #lb:not(.vmode) [data-step] { top: 50%; margin-top: -24px; width: 48px; height: 48px; padding: 0; line-height: 1; font-size: 2rem; background: rgba(0,0,0,.4); border-radius: 50%; }
+  #lb:not(.vmode) [data-step="-1"] { left: .4rem; } #lb:not(.vmode) [data-step="1"] { right: .4rem; }
+  .card2 { padding: 1rem; }
+  summary { flex-wrap: wrap; }
+  .home { padding: 1rem 0; }
+}
