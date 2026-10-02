@@ -79,7 +79,7 @@ const TOGETHER = {
            "media/together/I.mp4", "media/together/J.mp4", "media/together/K.mp4", "media/together/E.mp4"
 
   ],
-  stories: [ { date: "2026-04-05", title: "Our first trip", text: "Tell the story here." } ]
+  stories: [ { date: "2026-04-05", title: "Our first trip", text: "TBA." } ]
 };
 
 // ---- COLOURS (change any hex code, save, refresh) ----
