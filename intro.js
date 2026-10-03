@@ -12,11 +12,18 @@
   const VIDEO_FIT_LANDSCAPE = "contain";             // laptops / wide screens
   const VIDEO_FIT_PORTRAIT = "cover";                // phones held upright
 
-  const FRIEND_NAME = "Ganesh";                    // shows as "To Our Dear Friend 1"
-  const TOPIC = "We wish you a truly blessed and joyful birthday.";                             // the big line under it
+  const FRIEND_NAME = "Friend Ganesh";                    // shows as "To Our Dear Friend 1"
+  const TOPIC = "We wish you a truly Blessed and Joyful Birthday.";                             // the big line under it
 
   const GATE_TEXT = "Do you wish to proceed?";       // first screen question
-  const GATE_BUTTON = "Yes.";                     // text on the button
+  const GATE_BUTTON = "Yes";                         // text on the main button
+  const GATE_NO_BUTTON = "No";                       // text on the "No" button
+
+  // What the question changes to each time someone presses "No"
+  const NO_REPLY_1 = "Come on, it doesn't take that long.";                          // after the 1st No
+  const NO_REPLY_2 = "Think about all the things you will be missing out on.";                          // after the 2nd No
+  const NO_REPLY_3 = "Dear {device} user, you never really had a choice in the first place.";      // after the 3rd No ({device} becomes iPhone, iPad or Android)
+  const NO_REPLY_3_OTHER = "Dear user, you never really had a choice in the first place.";                    // 3rd No on any other device (laptops etc.)
 
   // Optional music that plays under the title card ("" = none), e.g. "media/music.mp3"
   const MUSIC = "";
@@ -98,33 +105,46 @@
     }
     #intro-gate.gone { opacity: 0; }
     #gate-q {
-      font-size: clamp(20px, 4vw, 34px);
+      font-size: clamp(22px, 4.4vw, 34px);
       font-weight: 500; letter-spacing: -0.01em;
+      max-width: 16em; text-wrap: balance;
     }
-    #gate-btn {
+    #gate-q.swap { transition-duration: 0.5s; }   /* quick fade-out when the text changes */
+    #gate-btns { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .gate-btn {
       pointer-events: none;
-      padding: 14px 38px;
+      padding: 15px 38px;
+      min-width: min(200px, 70vw);         /* same width for Yes and No */
+      min-height: 50px;                    /* comfortable tap size */
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
       background: transparent;             /* same as the black background */
       color: #fff;
       border: 1px solid #fff;              /* white outline */
       border-radius: 999px;
-      font: 500 15px ${FONT}; letter-spacing: 0.02em;
+      font: 500 16px ${FONT}; letter-spacing: 0.02em;
       cursor: pointer;
       transition: opacity 1.8s ${EASE}, transform 1.8s ${EASE}, filter 1.8s ${EASE}, background 0.3s ease;
     }
-    #gate-btn.in { pointer-events: auto; }
-    #gate-btn.in:hover { background: rgba(255, 255, 255, 0.14); }
-    #gate-btn:focus-visible { outline: 2px solid rgba(255,255,255,0.6); outline-offset: 4px; }
+    .gate-btn.in { pointer-events: auto; }
+    @media (hover: hover) { .gate-btn.in:hover { background: rgba(255, 255, 255, 0.14); } }
+    .gate-btn.in:active { background: rgba(255, 255, 255, 0.14); }
+    .gate-btn:focus-visible { outline: 2px solid rgba(255,255,255,0.6); outline-offset: 4px; }
 
     /* ----- Corner buttons ----- */
     #intro .corner {
-      position: absolute; bottom: 24px;
+      position: absolute; bottom: calc(24px + env(safe-area-inset-bottom, 0px));
       padding: 10px 18px; border: 1px solid rgba(255,255,255,0.5);
       background: rgba(0,0,0,0.4); color: #fff; border-radius: 999px;
       font: 14px system-ui, sans-serif; cursor: pointer;
     }
     #intro-skip  { right: 24px; }
     #intro-sound { left: 24px; display: none; }
+
+    @media (max-width: 480px) {
+      #t-to { letter-spacing: 0.22em; }
+      #intro-gate { gap: 28px; }
+    }
   `;
   document.head.appendChild(style);
 
@@ -139,7 +159,10 @@
     </div>
     <div id="intro-gate">
       <div id="gate-q" class="t-line"></div>
-      <button id="gate-btn" class="t-line"></button>
+      <div id="gate-btns">
+        <button id="gate-btn" class="gate-btn t-line"></button>
+        <button id="gate-no" class="gate-btn t-line"></button>
+      </div>
     </div>
     <button id="intro-sound" class="corner">Tap for sound</button>
     <button id="intro-skip" class="corner">Skip</button>
@@ -152,6 +175,7 @@
   $("t-topic").textContent = TOPIC;
   $("gate-q").textContent = GATE_TEXT;
   $("gate-btn").textContent = GATE_BUTTON;
+  $("gate-no").textContent = GATE_NO_BUTTON;
 
   const video = overlay.querySelector("video");
 
@@ -257,9 +281,46 @@
     $("gate-q").classList.add("in");
     await sleep(GATE_BUTTON_DELAY);    if (finished || started) return;
     $("gate-btn").classList.add("in");
+    $("gate-no").classList.add("in");
   })();
 
-  // 8) The button press: this is what lets the browser play sound for the rest of the intro
+  // 8) The "No" button: the question text changes each time
+  function detectDevice() {
+    const ua = navigator.userAgent || "";
+    if (/iPhone|iPod/i.test(ua)) return "iPhone";
+    if (/iPad/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)) return "iPad";
+    if (/Android/i.test(ua)) return "Android";
+    return null;
+  }
+
+  let noCount = 0;
+  let swapping = false;
+  $("gate-no").addEventListener("click", async () => {
+    if (started || finished || swapping) return;
+    swapping = true;
+    noCount++;
+
+    let text;
+    if (noCount === 1) text = NO_REPLY_1;
+    else if (noCount === 2) text = NO_REPLY_2;
+    else {
+      const device = detectDevice();
+      text = device ? NO_REPLY_3.replace("{device}", device) : NO_REPLY_3_OTHER;
+    }
+
+    const q = $("gate-q");
+    q.classList.add("swap");     // quick fade out...
+    q.classList.remove("in");
+    await sleep(550);
+    q.textContent = text;
+    q.classList.remove("swap");  // ...then the usual slow blur-to-sharp fade in
+    void q.offsetWidth;
+    q.classList.add("in");
+    if (noCount >= 3) $("gate-no").classList.remove("in");
+    swapping = false;
+  });
+
+  // 9) The "Yes" button press: this is what lets the browser play sound for the rest of the intro
   $("gate-btn").addEventListener("click", () => {
     if (started) return;
     started = true;
